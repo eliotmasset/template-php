@@ -1,0 +1,8 @@
+{
+    "/":"Home.php::loadPage",
+    "/home":"Home.php::loadPage",
+    "Error":{
+        "404":"",
+        "500":""
+    }
+}
