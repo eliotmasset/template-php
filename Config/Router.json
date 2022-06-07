@@ -1,6 +1,8 @@
 {
     "/":"Home.php::loadPage",
     "/home":"Home.php::loadPage",
+    "/shop":"Shop/Elements.php::loadPage",
+    "/shop/element":"Shop/Element.php::loadPage(?id)",
     "Error":{
         "404":"",
         "500":""

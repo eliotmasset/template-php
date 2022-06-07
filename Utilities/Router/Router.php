@@ -48,7 +48,7 @@ class Router
     {
 
         Router::load();
-        
+
         $url='';
 
         if( ! isset( $_GET[self::$getValue] ) ) {
@@ -63,7 +63,16 @@ class Router
         if(str_contains(self::$routes[$url], ".php::")) {
             $path = explode(".php::",self::$routes[$url]);
             require_once self::$controllerFolder."/".$path[0].".php";
-            call_user_func($path[0]."::".$path[1]);
+            array_shift($_GET);
+            if(empty($_GET)) {
+                call_user_func(preg_replace('/(.*)\/([^\/]*)$/','$2',$path[0])."::".$path[1]);
+            } else {
+                $urlStr = preg_replace('/(.*)\/([^\/]*)$/','$2',$path[0])."::".$path[1];
+                foreach ($_GET as $key => $value) {
+                    $urlStr = preg_replace("/\?$key/",$value,$urlStr);
+                }
+                eval("return ".$urlStr.";");// Because we can't do a call_user_func()
+            }
         } else { // Or just a file
             require_once self::$controllerFolder."/".self::$routes[$url];
         }
