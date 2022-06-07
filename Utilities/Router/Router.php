@@ -69,8 +69,10 @@ class Router
             } else {
                 $urlStr = preg_replace('/(.*)\/([^\/]*)$/','$2',$path[0])."::".$path[1];
                 foreach ($_GET as $key => $value) {
-                    $urlStr = preg_replace("/\?$key/",$value,$urlStr);
+                    $urlStr = preg_replace("/\?$key/","\"$value\"",$urlStr);
                 }
+                $urlStr = preg_replace("/,\?[^,\)]*/","",$urlStr); //If unspecified params
+                $urlStr = preg_replace("/\?[^,\)]*,/","",$urlStr); //If unspecified params
                 eval("return ".$urlStr.";");// Because we can't do a call_user_func()
             }
         } else { // Or just a file
