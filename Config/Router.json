@@ -4,7 +4,7 @@
     "/shop":"Shop/Elements.php::loadPage",
     "/shop/element":"Shop/Element.php::loadPage(?id,?titre)",
     "Error":{
-        "404":"",
-        "500":""
+        "404":"Error/_404.php::loadPage",
+        "500":"Error/_500.php::loadPage"
     }
 }
