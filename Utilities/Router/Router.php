@@ -1,5 +1,7 @@
 <?php
 
+include_once("Utilities/Logger/Logger.php");
+
 class Router 
 {
 
@@ -13,8 +15,9 @@ class Router
 
     private static $routes = [];
 
-    private static function load() {
+    private static function load($logger) {
         if(!file_exists("Config/Router.json")) {
+            $logger->error("FILE_NOT_FOUND"," Config Router file not found. \nCheck at Config/Router.json");
             throw new Exception('Error'." Config Router file not found. \nCheck at Config/Router.json");
         }
         self::$routes = json_decode( file_get_contents("Config/Router.json"),true );
@@ -53,11 +56,14 @@ class Router
     public static function factory() :bool
     {
         try {
-            Router::load();
+            $logger = new Logger();
+
+            Router::load($logger);
 
             $url='';
 
             if( ! isset( $_GET[self::$getValue] ) ) {
+                $logger->error("INVALID_VALUE","The current getValue is : \"".self::$getValue."\" but is invalid.\n set the getValue by : Router::setGetValue(your Value)");
                 throw new Exception('Error: '."The current getValue is : \"".self::$getValue."\" but is invalid.\n set the getValue by : Router::setGetValue(your Value)");
             }
 
@@ -68,7 +74,8 @@ class Router
             }
             
             if(!array_key_exists($url,self::$routes)) { // Error 404 if url doesn't exist
-                self::eror("404");
+                self::error("404");
+                return false;
             }
             // If we have to call a method
             if(str_contains(self::$routes[$url], ".php::")) {
@@ -91,11 +98,14 @@ class Router
             }
         } catch (\Exception $e) {
             self::error("500");
+            return false;
         } catch (\Error $e) {
             self::error("500");
+            return false;
         } catch (\Throwable $e) {
             self::error("500");
-          }
+            return false;
+        }
 
         return true;
     }
