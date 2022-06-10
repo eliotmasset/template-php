@@ -56,6 +56,7 @@ cd template-php
 
 ```bash
 sudo apt-get install apache2 php
+sudo a2enmod rewrite && sudo service apache2 restart
 ```
 
 4. Change l'adresse de ton localhost
