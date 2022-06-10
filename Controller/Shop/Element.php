@@ -1,6 +1,6 @@
 <?php
 
-include("Utilities/Logger/Logger.php");
+include_once "Utilities/Logger/Logger.php";
 
 class Element {
 

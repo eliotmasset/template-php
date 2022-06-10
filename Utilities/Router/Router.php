@@ -1,6 +1,6 @@
 <?php
 
-include_once("Utilities/Logger/Logger.php");
+include_once "Utilities/Logger/Logger.php";
 
 class Router 
 {
@@ -111,5 +111,3 @@ class Router
     }
 
 }
-
-?>
