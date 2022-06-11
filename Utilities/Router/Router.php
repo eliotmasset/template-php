@@ -67,6 +67,28 @@ class Router
                 throw new Exception('Error: '."The current getValue is : \"".self::$getValue."\" but is invalid.\n set the getValue by : Router::setGetValue(your Value)");
             }
 
+            //Specifics files :
+                
+            if(preg_match('/[^\.]+\.([^\.]+)$/', $_GET[self::$getValue], $matches)) {
+                switch($matches[1]) {
+                    case "css":
+                        if (file_exists('Assets/'.$_GET[self::$getValue])) {
+                            header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                            header("Cache-Control: public"); // needed for internet explorer
+                            header("Content-type: text/css");
+                            header("Content-Transfer-Encoding: Binary");
+                            header("Content-Length:".filesize($_GET[self::$getValue]));
+                            header("Content-Disposition: attachment; filename=".$_GET[self::$getValue]);
+                            return readfile('Assets/'.$_GET[self::$getValue]);
+                        }
+                        self::error("400");
+                        return false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             $url="/".$_GET[self::$getValue];
 
             if(substr($url, -1) == '/') { // Remove last / if exist
