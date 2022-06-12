@@ -62,6 +62,7 @@ class Router
 
             $url='';
 
+
             if( ! isset( $_GET[self::$getValue] ) ) {
                 $logger->error("INVALID_VALUE","The current getValue is : \"".self::$getValue."\" but is invalid.\n set the getValue by : Router::setGetValue(your Value)");
                 throw new Exception('Error: '."The current getValue is : \"".self::$getValue."\" but is invalid.\n set the getValue by : Router::setGetValue(your Value)");
@@ -77,14 +78,67 @@ class Router
                             header("Cache-Control: public"); // needed for internet explorer
                             header("Content-type: text/css");
                             header("Content-Transfer-Encoding: Binary");
-                            header("Content-Length:".filesize($_GET[self::$getValue]));
+                            header("Content-Length:".filesize('Assets/'.$_GET[self::$getValue]));
                             header("Content-Disposition: attachment; filename=".$_GET[self::$getValue]);
                             return readfile('Assets/'.$_GET[self::$getValue]);
                         }
-                        self::error("400");
+                        self::error("404");
+                        return false;
+                        break;
+                    case "png":
+                    case "jpg":
+                    case "jpeg":
+                        if (file_exists('Assets/Media/'.$_GET[self::$getValue])) {
+                            header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                            header("Cache-Control: public"); // needed for internet explorer
+                            header("Content-type: image/".$matches[1]);
+                            header("Content-Transfer-Encoding: Binary");
+                            header("Content-Length:".filesize('Assets/Media/'.$_GET[self::$getValue]));
+                            header("Content-Disposition: attachment; filename=".$_GET[self::$getValue]);
+                            return readfile('Assets/Media/'.$_GET[self::$getValue]);
+                        }
+                        self::error("404");
+                        return false;
+                        break;
+                    case "mp3":
+                        if (file_exists('Assets/Media/'.$_GET[self::$getValue])) {
+                            header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                            header("Cache-Control: public"); // needed for internet explorer
+                            header("Content-type: audio/mpeg");
+                            header("Content-Transfer-Encoding: Binary");
+                            header("Content-Length:".filesize('Assets/Media/'.$_GET[self::$getValue]));
+                            header("Content-Disposition: attachment; filename=".$_GET[self::$getValue]);
+                            return readfile('Assets/Media/'.$_GET[self::$getValue]);
+                        }
+                        self::error("404");
+                        return false;
+                        break;
+                    case "mp4":
+                    case "avi":
+                        if (file_exists('Assets/Media/'.$_GET[self::$getValue])) {
+                            header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                            header("Cache-Control: public"); // needed for internet explorer
+                            header("Content-type: video/".$matches[1]);
+                            header("Content-Transfer-Encoding: Binary");
+                            header("Content-Length:".filesize('Assets/Media/'.$_GET[self::$getValue]));
+                            header("Content-Disposition: attachment; filename=".$_GET[self::$getValue]);
+                            return readfile('Assets/Media/'.$_GET[self::$getValue]);
+                        }
+                        self::error("404");
                         return false;
                         break;
                     default:
+                        if (file_exists('Assets/'.$_GET[self::$getValue])) {
+                            header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                            header("Cache-Control: public"); // needed for internet explorer
+                            header("Content-type: text/".$matches[1]);
+                            header("Content-Transfer-Encoding: Binary");
+                            header("Content-Length:".filesize('Assets/Media/'.$_GET[self::$getValue]));
+                            header("Content-Disposition: attachment; filename=".$_GET[self::$getValue]);
+                            return readfile('Assets/Media/'.$_GET[self::$getValue]);
+                        }
+                        self::error("404");
+                        return false;
                         break;
                 }
             }
@@ -99,6 +153,7 @@ class Router
                 self::error("404");
                 return false;
             }
+
             // If we have to call a method
             if(str_contains(self::$routes[$url], ".php::")) {
                 $path = explode(".php::",self::$routes[$url]);
