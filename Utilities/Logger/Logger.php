@@ -55,22 +55,22 @@ class Logger
         
     }
     public function critical(string $title, string $message, int $code=0, $callback = null) {
-        file_put_contents($this->getMainPath().'/'.$this->getName(),"\n".($code!==0?"CRITICAL [$code] : ":"CRITICAL :")."$title \n $message",FILE_APPEND);
+        file_put_contents($this->getMainPath().'/'.$this->getName(),"\n".($code!==0?"[ ".date("Y-m-d h:i:s")." ] CRITICAL [$code] : ":"[ ".date("Y-m-d h:i:s")." ] CRITICAL :")."$title \n $message",FILE_APPEND);
         if (is_callable($callback)) {
             $callback($code);
         }
     }
     public function error(string $title, string $message, int $code=0, $callback = null) {
-        file_put_contents($this->getMainPath().'/'.$this->getName(),"\n".($code!==0?"ERROR [$code] : ":"ERROR :")."$title \n $message",FILE_APPEND);
+        file_put_contents($this->getMainPath().'/'.$this->getName(),"\n".($code!==0?"[ ".date("Y-m-d h:i:s")." ] ERROR [$code] : ":"[ ".date("Y-m-d h:i:s")." ] ERROR :")."$title \n $message",FILE_APPEND);
         if (is_callable($callback)) {
             $callback($code);
         }
     }
     public function warning(string $title, string $message, int $code=0) {
-        file_put_contents($this->getMainPath().'/'.$this->getName(),"\n".($code!==0?"Warning [$code] : ":"Warning :")."$title \n $message",FILE_APPEND);
+        file_put_contents($this->getMainPath().'/'.$this->getName(),"\n".($code!==0?"[ ".date("Y-m-d h:i:s")." ] Warning [$code] : ":"[ ".date("Y-m-d h:i:s")." ] Warning :")."$title \n $message",FILE_APPEND);
     }
     public function notif(string $title, string $message) {
-        file_put_contents($this->getMainPath().'/'.$this->getName(),"\n".$title." : ".$message,FILE_APPEND);
+        file_put_contents($this->getMainPath().'/'.$this->getName(),"\n[ ".date("Y-m-d h:i:s")." ] ".$title." : ".$message,FILE_APPEND);
     }
 
     public function getMainPath() :string
