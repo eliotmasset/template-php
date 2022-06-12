@@ -127,6 +127,19 @@ class Router
                         self::error("404");
                         return false;
                         break;
+                    case "js":
+                        if (file_exists('Assets/Javascript/'.$_GET[self::$getValue])) {
+                            header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+                            header("Cache-Control: public"); // needed for internet explorer
+                            header("Content-type: application/javascript");
+                            header("Content-Transfer-Encoding: Binary");
+                            header("Content-Length:".filesize('Assets/Javascript/'.$_GET[self::$getValue]));
+                            header("Content-Disposition: attachment; filename=".$_GET[self::$getValue]);
+                            return readfile('Assets/Javascript/'.$_GET[self::$getValue]);
+                        }
+                        self::error("404");
+                        return false;
+                        break;
                     default:
                         if (file_exists('Assets/'.$_GET[self::$getValue])) {
                             header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
